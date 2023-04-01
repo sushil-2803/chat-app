@@ -1,5 +1,28 @@
 {
   "dependencies": {
+    "env-cmd": "^10.1.0",
     "express": "^4.18.2"
+  },
+  "name": "chat-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "env-cmd -f ./config/dev.env node src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sushil-2803/chat-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sushil-2803/chat-app/issues"
+  },
+  "homepage": "https://github.com/sushil-2803/chat-app#readme",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
