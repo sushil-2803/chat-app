@@ -29,7 +29,12 @@ io.on('connection',(socket)=>{
         //emit is used to send a message
         io.emit('message',message)
     })
-    //
+
+    socket.on('sendLocation',(location)=>{
+        socket.broadcast.emit('message',`Location lat:${location.latitude} long:${location.longitude}`)
+    })
+
+    // send message to all users when a client disconnects
     socket.on('disconnect',()=>{
         io.emit('message','A user has left!')
     })
