@@ -31,7 +31,7 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('sendLocation',(location)=>{
-        socket.broadcast.emit('message',`Location lat:${location.latitude} long:${location.longitude}`)
+        socket.broadcast.emit('message',`https://google.com/maps?q=${location.latitude},${location.longitude}`)
     })
 
     // send message to all users when a client disconnects
