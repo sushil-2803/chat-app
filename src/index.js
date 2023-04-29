@@ -2,6 +2,7 @@ const http = require('http');
 const path = require('path');
 const express = require('express');
 const socketio = require('socket.io')
+const Filter = require('bad-words')
 
 const app = express()
 // creating a server and passing express app
@@ -23,11 +24,15 @@ io.on('connection',(socket)=>{
     //sends a broadcast message to all connected client expect the creater
     socket.broadcast.emit('message',"A new user has joined!")
     // on is used to listen to a event
-    socket.on('sendMessage',(message)=>{
-        console.log(message)
+    socket.on('sendMessage',(message,callback)=>{
+        const filter = new Filter()
+        if (filter.isProfane(message)){
+            return callback('Profanity is not allowed')
+        } 
         //io sends message to all connceted to socket
         //emit is used to send a message
         io.emit('message',message)
+        callback()
     })
 
     socket.on('sendLocation',(location)=>{

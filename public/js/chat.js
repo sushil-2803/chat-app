@@ -3,7 +3,15 @@ const socket =io()
 document.querySelector('#chat-app').addEventListener('submit',(e)=>{
     e.preventDefault()
     const message=document.getElementById('message').value
-    socket.emit('sendMessage',message)
+    socket.emit('sendMessage',message, (error)=>{
+        if(error)
+        {
+            return console.log("Profanity not allowed")
+        }
+        else{
+            console.log('Delivered!')
+        }
+    })
 })
 
 socket.on('message',(message)=>{
