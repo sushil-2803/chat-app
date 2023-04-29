@@ -15,28 +15,28 @@ const publicDirectoryPath = path.join(__dirname, '../public');
 app.use(express.static(publicDirectoryPath));
 
 // connection runs when a new client joins
-io.on('connection',(socket)=>{
+io.on('connection', (socket) => {
     console.log('New WebSocket connection')
-    
+
     //socket only sends message to the client
     //emit is used to emit a event
-    socket.emit('message',"Welcome!")
+    socket.emit('message', "Welcome!")
     //sends a broadcast message to all connected client expect the creater
-    socket.broadcast.emit('message',"A new user has joined!")
+    socket.broadcast.emit('message', "A new user has joined!")
     // on is used to listen to a event
-    socket.on('sendMessage',(message,callback)=>{
+    socket.on('sendMessage', (message, callback) => {
         const filter = new Filter()
-        if (filter.isProfane(message)){
+        if (filter.isProfane(message)) {
             return callback('Profanity is not allowed')
-        } 
+        }
         //io sends message to all connceted to socket
         //emit is used to send a message
-        io.emit('message',message)
+        io.emit('message', message)
         callback()
     })
 
-    socket.on('sendLocation',(location,callback)=>{
-        socket.broadcast.emit('message',`https://google.com/maps?q=${location.latitude},${location.longitude}`)
+    socket.on('sendLocation', (location, callback) => {
+        socket.broadcast.emit('message', `https://google.com/maps?q=${location.latitude},${location.longitude}`)
         // callback is used to send ack that the event is run succefully
         // callback can take no or multiple parameter which is passed to
         // the client making the request
@@ -44,8 +44,8 @@ io.on('connection',(socket)=>{
     })
 
     // send message to all users when a client disconnects
-    socket.on('disconnect',()=>{
-        io.emit('message','A user has left!')
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left!')
     })
 })
 
