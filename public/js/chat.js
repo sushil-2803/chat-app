@@ -3,6 +3,11 @@ const socket =io()
 document.querySelector('#chat-app').addEventListener('submit',(e)=>{
     e.preventDefault()
     const message=document.getElementById('message').value
+
+    // emit is used to emit an event to the server
+    // first param is event name
+    // second param is the content, variable,
+    // third param is ack for the completion of event - Not Complosury
     socket.emit('sendMessage',message, (error)=>{
         if(error)
         {
