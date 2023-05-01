@@ -4,6 +4,11 @@ const $messageForm = document.querySelector('#chat-app')
 const $messageFormInput = $messageForm.querySelector('#message')
 const $messageFormButton = $messageForm.querySelector('#send')
 const $sendLocation = document.querySelector('#send-location')
+const $messages = document.querySelector('#messages')
+
+
+//templates
+const messageTemplate = document.querySelector('#message-template').innerHTML
 
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -27,9 +32,11 @@ $messageForm.addEventListener('submit', (e) => {
         }
     })
 })
-
+// revices a message and displays on the screen
 socket.on('message', (message) => {
     console.log(message)
+    const html =Mustache.render(messageTemplate,{message})
+    $messages.insertAdjacentHTML('beforeend',html)
 })
 
 $sendLocation.addEventListener('click', () => {
