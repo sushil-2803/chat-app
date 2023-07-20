@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const socketio = require('socket.io')
 const Filter = require('bad-words')
-
+const {generateMessage}=require('./utils/messages')
 const app = express()
 // creating a server and passing express app
 const server = http.createServer(app)
@@ -20,9 +20,9 @@ io.on('connection', (socket) => {
 
     //socket only sends message to the client
     //emit is used to emit a event
-    socket.emit('message', "Welcome!")
+    socket.emit('message', generateMessage("Welcome!"))
     //sends a broadcast message to all connected client expect the creater
-    socket.broadcast.emit('message', "A new user has joined!")
+    socket.broadcast.emit('message', generateMessage("A new user has joined!"))
     // on is used to listen to a event
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter()
@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
         }
         //io sends message to all connceted to socket
         //emit is used to send a message
-        io.emit('message', message)
+        io.emit('message', generateMessage(message))
         callback()
     })
 
@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
 
     // send message to all users when a client disconnects
     socket.on('disconnect', () => {
-        io.emit('message', 'A user has left!')
+        io.emit('message', generateMessage('A user has left!'))
     })
 })
 
