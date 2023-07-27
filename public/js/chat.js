@@ -34,7 +34,7 @@ $messageForm.addEventListener('submit', (e) => {
 // revices a message and displays on the screen
 socket.on('message', (message) => {
     console.log(message)
-    const html =Mustache.render(messageTemplate,{message:message.text,createdAt:message.createdAt})
+    const html =Mustache.render(messageTemplate,{message:message.text,createdAt:moment(message.createdAt).format('h:mm a')})
     $messages.insertAdjacentHTML('beforeend',html)
 })
 
