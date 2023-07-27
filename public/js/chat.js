@@ -34,13 +34,13 @@ $messageForm.addEventListener('submit', (e) => {
 // revices a message and displays on the screen
 socket.on('message', (message) => {
     console.log(message)
-    const html =Mustache.render(messageTemplate,{message})
+    const html =Mustache.render(messageTemplate,{message:message.text,createdAt:moment(message.createdAt).format('h:mm a')})
     $messages.insertAdjacentHTML('beforeend',html)
 })
 
 // recives location message
 socket.on('locationMessage',(location)=>{
-    const html = Mustache.render(locationTemplate,{location})
+    const html = Mustache.render(locationTemplate,{location:location.location,createdAt:moment(message.createdAt).format('h:mm a')})
     $messages.insertAdjacentHTML('beforeend',html)
 })
 
