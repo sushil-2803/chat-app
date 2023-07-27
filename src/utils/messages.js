@@ -4,7 +4,13 @@ const generateMessage= (text)=>{
         createdAt: new Date().getTime()
     }
 }
-
+const generateLocationMessage=(location)=>{
+    return {
+        location,
+        createdAt:new Date().getTime()
+    }
+}
 module.exports={
-    generateMessage
+    generateMessage,
+    generateLocationMessage
 }

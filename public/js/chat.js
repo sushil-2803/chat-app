@@ -40,7 +40,7 @@ socket.on('message', (message) => {
 
 // recives location message
 socket.on('locationMessage',(location)=>{
-    const html = Mustache.render(locationTemplate,{location})
+    const html = Mustache.render(locationTemplate,{location:location.location,createdAt:moment(message.createdAt).format('h:mm a')})
     $messages.insertAdjacentHTML('beforeend',html)
 })
 

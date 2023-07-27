@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const socketio = require('socket.io')
 const Filter = require('bad-words')
-const {generateMessage}=require('./utils/messages')
+const {generateMessage,generateLocationMessage}=require('./utils/messages')
 const app = express()
 // creating a server and passing express app
 const server = http.createServer(app)
@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendLocation', (location, callback) => {
-        socket.broadcast.emit('locationMessage', `https://google.com/maps?q=${location.latitude},${location.longitude}`)
+        socket.broadcast.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${location.latitude},${location.longitude}`))
         // callback is used to send ack that the event is run succefully
         // callback can take no or multiple parameter which is passed to
         // the client making the request
