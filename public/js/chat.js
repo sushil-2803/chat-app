@@ -1,6 +1,6 @@
 const socket = io()
 
-const $messageForm = document.querySelector('#chat-app')
+const $messageForm = document.querySelector('#message-form')
 const $messageFormInput = $messageForm.querySelector('#message')
 const $messageFormButton = $messageForm.querySelector('#send')
 const $sendLocation = document.querySelector('#send-location')
@@ -8,7 +8,7 @@ const $messages = document.querySelector('#messages')
 
 //templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
-const locationTemplate = document.querySelector('#location-template').innerHTML
+const locationTemplate = document.querySelector('#location-message-template').innerHTML
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault()
 
@@ -34,14 +34,14 @@ $messageForm.addEventListener('submit', (e) => {
 // revices a message and displays on the screen
 socket.on('message', (message) => {
     console.log(message)
-    const html =Mustache.render(messageTemplate,{message:message.text,createdAt:moment(message.createdAt).format('h:mm a')})
-    $messages.insertAdjacentHTML('beforeend',html)
+    const html = Mustache.render(messageTemplate, { message: message.text, createdAt: moment(message.createdAt).format('h:mm a') })
+    $messages.insertAdjacentHTML('beforeend', html)
 })
 
 // recives location message
-socket.on('locationMessage',(location)=>{
-    const html = Mustache.render(locationTemplate,{location:location.location,createdAt:moment(message.createdAt).format('h:mm a')})
-    $messages.insertAdjacentHTML('beforeend',html)
+socket.on('locationMessage', (location) => {
+    const html = Mustache.render(locationTemplate, { location: location.location, createdAt: moment(message.createdAt).format('h:mm a') })
+    $messages.insertAdjacentHTML('beforeend', html)
 })
 
 $sendLocation.addEventListener('click', () => {
