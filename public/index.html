@@ -17,26 +17,44 @@
         </div>
 
         <div class="chat__main">
-            <div id="messages"></div>
+            <div id="messages" class='chat__messages'></div>
 
-            <form id="message-form">
-                <input type="text" id="message" placeholder="Message">
-                <button id="send">Send</button>
-            </form>
-            <button id="send-location">Send Location</button>
+            <div class="compose">
+                <form id="message-form">
+                    <input type="text" id="message" placeholder="Message">
+                    <button id="send">Send</button>
+                </form>
+                <button id="send-location">Send Location</button>
+            </div>
         </div>
     </div>
 
     <!-- template for message -->
     <script id="message-template" type="text/html1">
-        <div>
-            <p>{{createdAt}} - {{message}}</p>
+        <div class='message'>
+            <p> 
+                <span class='message__name'>
+                    Some Name
+                </span>
+                <span class='message__meta'>
+                    {{createdAt}}
+                </span>
+                </p>
+            <p> {{message}}</p>
         </div>
     </script>
     <!-- Template for Location Sharing -->
     <script id="location-message-template" type="text/html1">
-        <div>
-            <p> {{createdAt}} - <a href="{{location}}" target="_blank">My Current Location</a></p>
+        <div class='message'>
+            <p> 
+                <span class='message__name'>
+                    Some Name
+                </span>
+                <span class='message__meta'>
+                    {{createdAt}}
+                </span>
+                </p>
+            <p><a href="{{location}}" target="_blank">My Current Location</a></p>
         </div>
     </script>
 

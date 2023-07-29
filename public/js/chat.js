@@ -24,16 +24,16 @@ $messageForm.addEventListener('submit', (e) => {
         $messageFormInput.value = ''
         $messageFormInput.focus()
         if (error) {
-            return console.log("Profanity not allowed")
+            // return console.log("Profanity not allowed")
         }
         else {
-            console.log('Delivered!')
+            // console.log('Delivered!')
         }
     })
 })
 // revices a message and displays on the screen
 socket.on('message', (message) => {
-    console.log(message)
+    // console.log(message)
     const html = Mustache.render(messageTemplate, { message: message.text, createdAt: moment(message.createdAt).format('h:mm a') })
     $messages.insertAdjacentHTML('beforeend', html)
 })
@@ -56,7 +56,7 @@ $sendLocation.addEventListener('click', () => {
             longitude: position.coords.longitude
         }, () => {
             $sendLocation.removeAttribute('disabled')
-            console.log("Location Shared!")
+            // console.log("Location Shared!")
         })
     })
 })
