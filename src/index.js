@@ -18,11 +18,7 @@ app.use(express.static(publicDirectoryPath));
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
 
-    //socket only sends message to the client
-    //emit is used to emit a event
-    socket.emit('message', generateMessage("Welcome!"))
-    //sends a broadcast message to all connected client expect the creater
-    socket.broadcast.emit('message', generateMessage("A new user has joined!"))
+    
     // on is used to listen to a event
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter()
@@ -31,7 +27,7 @@ io.on('connection', (socket) => {
         }
         //io sends message to all connceted to socket
         //emit is used to send a message
-        io.emit('message', generateMessage(message))
+        io.to('Mumbai').emit('message', generateMessage(message))
         callback()
     })
 
@@ -41,6 +37,19 @@ io.on('connection', (socket) => {
         // callback can take no or multiple parameter which is passed to
         // the client making the request
         callback()
+    })
+
+    // we are getting 
+    socket.on("join",({username,room})=>{
+        socket.join(room)
+        //io.to.emit: - emits message to specific room
+        //socket.brodcast.to.emit
+        //socket only sends message to the client
+    //emit is used to emit a event
+    socket.emit('message', generateMessage("Welcome!"))
+    //sends a broadcast message to all connected client expect the creater
+    socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
+
     })
 
     // send message to all users when a client disconnects
@@ -53,3 +62,7 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+//socket.emit : - sends message to everyone
+//io.emit : - sends message to everyone including the sender
+//socket.brodcast.emit :- sends message to everyone expect the sender
