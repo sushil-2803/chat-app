@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const socketio = require('socket.io')
 const Filter = require('bad-words')
-const {generateMessage,generateLocationMessage}=require('./utils/messages')
+const { generateMessage, generateLocationMessage } = require('./utils/messages')
 const app = express()
 // creating a server and passing express app
 const server = http.createServer(app)
@@ -18,7 +18,7 @@ app.use(express.static(publicDirectoryPath));
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
 
-    
+
     // on is used to listen to a event
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter()
@@ -40,15 +40,15 @@ io.on('connection', (socket) => {
     })
 
     // we are getting 
-    socket.on("join",({username,room})=>{
+    socket.on("join", ({ username, room }) => {
         socket.join(room)
         //io.to.emit: - emits message to specific room
         //socket.brodcast.to.emit
         //socket only sends message to the client
-    //emit is used to emit a event
-    socket.emit('message', generateMessage("Welcome!"))
-    //sends a broadcast message to all connected client expect the creater
-    socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
+        //emit is used to emit a event
+        socket.emit('message', generateMessage("Welcome!"))
+        //sends a broadcast message to all connected client expect the creater
+        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
 
     })
 
