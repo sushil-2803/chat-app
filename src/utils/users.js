@@ -22,7 +22,7 @@ const addUser = ({ id, username, room }) => {
 
     if (exsistingUser) {
         return {
-            error: "Uesrname in Use!"
+            error: "Username in Use!"
         }
     }
 
