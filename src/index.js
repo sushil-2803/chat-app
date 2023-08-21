@@ -3,7 +3,8 @@ const path = require('path');
 const express = require('express');
 const socketio = require('socket.io')
 const Filter = require('bad-words')
-const { generateMessage, generateLocationMessage } = require('./utils/messages')
+const { generateMessage, generateLocationMessage } = require('./utils/messages');
+const { addUser, removeUser, getUsersInRoom, getUser } = require('./utils/users');
 const app = express()
 // creating a server and passing express app
 const server = http.createServer(app)
@@ -17,22 +18,40 @@ app.use(express.static(publicDirectoryPath));
 // connection runs when a new client joins
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
-
-
     // on is used to listen to a event
+    socket.on("join", ({ username, room },callback) => {
+        const{error,user}=addUser({id:socket.id,username,room})
+        
+        if(error){
+            return callback(error)
+        }
+        socket.join(user.room)
+        //io.to.emit: - emits message to specific room
+        //socket.brodcast.to.emit
+        //socket only sends message to the client
+        //emit is used to emit a event
+        socket.emit('message', generateMessage("admin","Welcome!"))
+        //sends a broadcast message to all connected client expect the creater
+        socket.broadcast.to(user.room).emit('message', generateMessage(`${user.username} has joined!`))
+        callback()
+
+    })
+
     socket.on('sendMessage', (message, callback) => {
+        const user=getUser(socket.id)
         const filter = new Filter()
         if (filter.isProfane(message)) {
             return callback('Profanity is not allowed')
         }
         //io sends message to all connceted to socket
         //emit is used to send a message
-        io.to('Mumbai').emit('message', generateMessage(message))
+        io.to(user.room).emit('message', generateMessage(user.username,message))
         callback()
     })
 
     socket.on('sendLocation', (location, callback) => {
-        socket.broadcast.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${location.latitude},${location.longitude}`))
+        const user=getUser(socket.id)
+        socket.broadcast.to(user.room).emit('locationMessage', generateLocationMessage(user.username,`https://google.com/maps?q=${location.latitude},${location.longitude}`))
         // callback is used to send ack that the event is run succefully
         // callback can take no or multiple parameter which is passed to
         // the client making the request
@@ -40,21 +59,15 @@ io.on('connection', (socket) => {
     })
 
     // we are getting 
-    socket.on("join", ({ username, room }) => {
-        socket.join(room)
-        //io.to.emit: - emits message to specific room
-        //socket.brodcast.to.emit
-        //socket only sends message to the client
-        //emit is used to emit a event
-        socket.emit('message', generateMessage("Welcome!"))
-        //sends a broadcast message to all connected client expect the creater
-        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
-
-    })
+   
 
     // send message to all users when a client disconnects
     socket.on('disconnect', () => {
-        io.emit('message', generateMessage('A user has left!'))
+        user=removeUser(socket.id)
+        if(user)
+        {
+            io.to(user.room).emit('message', generateMessage("admin",`${user.username} has left!`))
+        }
     })
 })
 
