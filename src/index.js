@@ -25,7 +25,6 @@ io.on('connection', (socket) => {
         if(error){
             return callback(error)
         }
-        
         socket.join(user.room)
         //io.to.emit: - emits message to specific room
         //socket.brodcast.to.emit
@@ -39,18 +38,20 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendMessage', (message, callback) => {
+        const user=getUser(socket.id)
         const filter = new Filter()
         if (filter.isProfane(message)) {
             return callback('Profanity is not allowed')
         }
         //io sends message to all connceted to socket
         //emit is used to send a message
-        io.to(user.room).emit('message', generateMessage(message))
+        io.to(user.room).emit('message', generateMessage(user.username,message))
         callback()
     })
 
     socket.on('sendLocation', (location, callback) => {
-        socket.broadcast.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${location.latitude},${location.longitude}`))
+        const user=getUser(socket.id)
+        socket.broadcast.to(user.room).emit('locationMessage', generateLocationMessage(user.username,`https://google.com/maps?q=${location.latitude},${location.longitude}`))
         // callback is used to send ack that the event is run succefully
         // callback can take no or multiple parameter which is passed to
         // the client making the request
