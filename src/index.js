@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
         //socket.brodcast.to.emit
         //socket only sends message to the client
         //emit is used to emit a event
-        socket.emit('message', generateMessage("Welcome!"))
+        socket.emit('message', generateMessage("admin","Welcome!"))
         //sends a broadcast message to all connected client expect the creater
         socket.broadcast.to(user.room).emit('message', generateMessage(`${user.username} has joined!`))
         callback()
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
         user=removeUser(socket.id)
         if(user)
         {
-            io.to(user.room).emit('message', generateMessage(`${user.username} has left!`))
+            io.to(user.room).emit('message', generateMessage("admin",`${user.username} has left!`))
         }
     })
 })
