@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
         }
         //io sends message to all connceted to socket
         //emit is used to send a message
-        io.to(user.room).emit('message', generateMessage(user.username,message))
+        // io.to(user.room).emit('message', generateMessage(user.username,message))
         callback()
     })
 
