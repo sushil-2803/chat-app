@@ -46,9 +46,7 @@ socket.on('locationMessage', (location) => {
     const html = Mustache.render(locationTemplate, { username:location.username,location: location.location, createdAt: moment(location.createdAt).format('h:mm a') })
     $messages.insertAdjacentHTML('beforeend', html)
 })
-// ******************
-// Maintaining streak
-// ******************
+
 socket.on('roomData',({room,users})=>{
     const html = Mustache.render(sidebarTemplate,{room,users})
     document.querySelector('#sidebar').innerHTML=html
