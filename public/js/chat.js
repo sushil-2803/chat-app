@@ -34,17 +34,26 @@ $messageForm.addEventListener('submit', (e) => {
         }
     })
 })
+const autoscroll = function(){
+    //getting the lastest message
+    const $newMessage =$messages.lastElementChild
+
+    //height of the new message
+    
+}
 // revices a message and displays on the screen
 socket.on('message', (message) => {
     // console.log(message)
     const html = Mustache.render(messageTemplate, { username:message.username,message: message.text, createdAt: moment(message.createdAt).format('h:mm a') })
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 // recives location message
 socket.on('locationMessage', (location) => {
     const html = Mustache.render(locationTemplate, { username:location.username,location: location.location, createdAt: moment(location.createdAt).format('h:mm a') })
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 socket.on('roomData',({room,users})=>{
