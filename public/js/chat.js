@@ -39,6 +39,23 @@ const autoscroll = function(){
     const $newMessage =$messages.lastElementChild
 
     //height of the new message
+    const newMessageStyles= getComputedStyle($newMessage)
+    const newMessageMargin= parseInt(newMessageStyles.marginBottom)
+    const newMessageHeight= $newMessage.offsetHeight+ newMessageMargin
+
+    //visible height
+    const visibleHeight = $messages.offsetHeight
+
+    // height of message containter
+    const containerHeight = $messages.scrollHeight
+
+    //How far have I scrolled
+    const scrollOffset = $messages.scrollTop+visibleHeight
+
+    if(Math.round(containerHeight - newMessageHeight) <= Math.round(scrollOffset)){
+        $messages.scrollTop=$messages.scrollHeight
+    }
+
     
 }
 // revices a message and displays on the screen
