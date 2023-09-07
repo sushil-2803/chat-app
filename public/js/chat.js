@@ -1,14 +1,17 @@
 const socket = io()
 
 const $messageForm = document.querySelector('#message-form')
+const $imageForm = document.querySelector('#image-form')
 const $messageFormInput = $messageForm.querySelector('#message')
 const $messageFormButton = $messageForm.querySelector('#send')
+const $imageFormButton = $imageForm.querySelector('#upload')
 const $sendLocation = document.querySelector('#send-location')
 const $messages = document.querySelector('#messages')
 
 //templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationTemplate = document.querySelector('#location-message-template').innerHTML
+const imageTemplate = document.querySelector('#image-message-template').innerHTML
 const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
 
@@ -34,6 +37,36 @@ $messageForm.addEventListener('submit', (e) => {
         }
     })
 })
+
+//emit image
+$imageForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    $imageFormButton.setAttribute('disabled', 'disabled')
+    const image = document.getElementById('image')
+    const file=image.files[0]
+    if(file.size>500000){
+        alert("Image size should be less than 500kb")
+        $imageFormButton.removeAttribute('disabled')
+        return
+    }
+    const reader = new FileReader()
+    reader.onload=function(e){
+        console.log("image loaded")
+        const image=e.target.result
+        socket.emit('sendImage', image, (error) => {
+            $imageFormButton.removeAttribute('disabled')
+            document.getElementById('image').value = ''
+        })
+    }
+    if(file){
+        reader.readAsDataURL(file)
+    }else{
+        alert("Please select an image")
+        $imageFormButton.removeAttribute('disabled')
+    }
+})
+
+
 const autoscroll = function(){
     //getting the lastest message
     const $newMessage =$messages.lastElementChild
@@ -69,6 +102,13 @@ socket.on('message', (message) => {
 // recives location message
 socket.on('locationMessage', (location) => {
     const html = Mustache.render(locationTemplate, { username:location.username,location: location.location, createdAt: moment(location.createdAt).format('h:mm a') })
+    $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
+})
+
+// recives image message
+socket.on('imageMessage', (image) => {
+    const html = Mustache.render(imageTemplate, { username:image.username,image: image.image, createdAt: moment(image.createdAt).format('h:mm a') })
     $messages.insertAdjacentHTML('beforeend', html)
     autoscroll()
 })
