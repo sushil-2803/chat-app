@@ -24,6 +24,10 @@
                     <input type="text" id="message" placeholder="Message" autocomplete="off" required>
                     <button id="send">Send</button>
                 </form>
+                <form id="image-form">
+                    <input type="file" id="image">
+                    <button id="upload">Upload</button>
+                </form>
                 <button id="send-location">Send Location</button>
             </div>
         </div>
@@ -55,6 +59,20 @@
                 </span>
                 </p>
             <p><a href="{{location}}" target="_blank">My Current Location</a></p>
+        </div>
+    </script>
+    <!-- Template for Image sharing -->
+    <script id="image-message-template" type="text/html">
+        <div class='message'>
+            <p> 
+                <span class='message__name'>
+                    {{username}}
+                </span>
+                <span class='message__meta'>
+                    {{createdAt}}
+                </span>
+                </p>
+            <p><img src="{{image}}" width="200px"></p>
         </div>
     </script>
     <!-- Template for List of Users -->

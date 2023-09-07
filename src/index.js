@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const socketio = require('socket.io')
 const Filter = require('bad-words')
-const { generateMessage, generateLocationMessage } = require('./utils/messages');
+const { generateMessage, generateLocationMessage,generateImageMessage } = require('./utils/messages');
 const { addUser, removeUser, getUsersInRoom, getUser } = require('./utils/users');
 const app = express()
 // creating a server and passing express app
@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
 
     socket.on('sendLocation', (location, callback) => {
         const user=getUser(socket.id)
-        socket.broadcast.to(user.room).emit('locationMessage', generateLocationMessage(user.username,`https://google.com/maps?q=${location.latitude},${location.longitude}`))
+        io.to(user.room).emit('locationMessage', generateLocationMessage(user.username,`https://google.com/maps?q=${location.latitude},${location.longitude}`))
         // callback is used to send ack that the event is run succefully
         // callback can take no or multiple parameter which is passed to
         // the client making the request
@@ -63,7 +63,13 @@ io.on('connection', (socket) => {
     })
 
     // we are getting 
-   
+   //recieving image
+    socket.on('sendImage', (image, callback) => {     
+        const user=getUser(socket.id)
+        console.log("image recieved")
+        io.to(user.room).emit('imageMessage', generateImageMessage(user.username,image))
+        callback()
+    })
 
     // send message to all users when a client disconnects
     socket.on('disconnect', () => {
