@@ -70,7 +70,7 @@ $imageForm.addEventListener('submit', (e) => {
 const autoscroll = function(){
     //getting the lastest message
     const $newMessage =$messages.lastElementChild
-
+    console.log($newMessage)
     //height of the new message
     const newMessageStyles= getComputedStyle($newMessage)
     const newMessageMargin= parseInt(newMessageStyles.marginBottom)
